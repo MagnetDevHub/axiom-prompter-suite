@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Zap, Target, TrendingUp } from "lucide-react";
+import { MessageCircle, Zap, Target, TrendingUp } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
 
 interface HeroSectionProps {
@@ -32,7 +32,7 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
           
           <h1 className="text-5xl md:text-7xl font-bold text-white">
             <span className="bg-gradient-to-r from-white via-primary-glow to-accent bg-clip-text text-transparent">
-              prathom.ai
+              Prathom.AI
             </span>
           </h1>
           
@@ -46,7 +46,7 @@ export const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
         {/* Feature highlights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-            <Sparkles className="w-8 h-8 text-primary-glow mx-auto mb-3" />
+            <MessageCircle className="w-8 h-8 text-primary-glow mx-auto mb-3" />
             <h3 className="text-white font-semibold mb-2">AI-Powered Optimization</h3>
             <p className="text-white/80 text-sm">Generate multiple high-quality prompts optimized for any AI model</p>
           </div>

@@ -4,12 +4,20 @@ import { HeroSection } from "@/components/HeroSection";
 import { PromptOptimizer } from "@/components/PromptOptimizer";
 import { MarketplaceSection } from "@/components/MarketplaceSection";
 import { AnalyticsSection } from "@/components/AnalyticsSection";
+import { CommunitySection } from "@/components/CommunitySection";
+import { AuthForm } from "@/components/AuthForm";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
+  const { user } = useAuth();
 
   const handleGetStarted = () => {
-    setActiveSection('optimizer');
+    if (!user) {
+      setActiveSection('auth');
+    } else {
+      setActiveSection('optimizer');
+    }
   };
 
   const renderSection = () => {
@@ -34,6 +42,14 @@ const Index = () => {
             <AnalyticsSection />
           </div>
         );
+      case 'community':
+        return (
+          <div className="pt-24 pb-12 px-4">
+            <CommunitySection />
+          </div>
+        );
+      case 'auth':
+        return <AuthForm onSuccess={() => setActiveSection('home')} />;
       default:
         return <HeroSection onGetStarted={handleGetStarted} />;
     }

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Menu, X, Sparkles, User, ShoppingBag, BarChart3 } from "lucide-react";
+import { Menu, X, MessageCircle, User, ShoppingBag, BarChart3, Users, LogOut } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface NavigationProps {
   activeSection: string;
@@ -10,12 +12,14 @@ interface NavigationProps {
 
 export const Navigation = ({ activeSection, onSectionChange }: NavigationProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   const navItems = [
-    { id: 'home', label: 'Home', icon: Sparkles },
-    { id: 'optimizer', label: 'Optimizer', icon: Sparkles },
+    { id: 'home', label: 'Home', icon: MessageCircle },
+    { id: 'optimizer', label: 'Optimizer', icon: MessageCircle },
     { id: 'marketplace', label: 'Marketplace', icon: ShoppingBag },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'community', label: 'Community', icon: Users },
   ];
 
   return (
@@ -25,9 +29,9 @@ export const Navigation = ({ activeSection, onSectionChange }: NavigationProps) 
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
+              <MessageCircle className="w-5 h-5 text-white" />
             </div>
-            <span className="text-xl font-bold text-foreground">prathom.ai</span>
+            <span className="text-xl font-bold text-foreground">Prathom.AI</span>
             <Badge variant="secondary" className="bg-primary/20 text-primary text-xs">
               BETA
             </Badge>
@@ -56,13 +60,28 @@ export const Navigation = ({ activeSection, onSectionChange }: NavigationProps) 
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              <User className="w-4 h-4 mr-2" />
-              Sign In
-            </Button>
-            <Button variant="default" size="sm">
-              Get Started
-            </Button>
+            <ThemeToggle />
+            {user ? (
+              <>
+                <span className="text-sm text-muted-foreground">
+                  {user.email}
+                </span>
+                <Button variant="ghost" size="sm" onClick={signOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" onClick={() => onSectionChange('auth')}>
+                  <User className="w-4 h-4 mr-2" />
+                  Sign In
+                </Button>
+                <Button variant="default" size="sm" onClick={() => onSectionChange('auth')}>
+                  Get Started
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -106,13 +125,34 @@ export const Navigation = ({ activeSection, onSectionChange }: NavigationProps) 
                 );
               })}
               <div className="flex flex-col gap-2 pt-4 border-t border-border/50">
-                <Button variant="ghost" size="sm" className="justify-start">
-                  <User className="w-4 h-4 mr-2" />
-                  Sign In
-                </Button>
-                <Button variant="default" size="sm">
-                  Get Started
-                </Button>
+                <ThemeToggle />
+                {user ? (
+                  <>
+                    <span className="text-sm text-muted-foreground px-3">
+                      {user.email}
+                    </span>
+                    <Button variant="ghost" size="sm" className="justify-start" onClick={signOut}>
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button variant="ghost" size="sm" className="justify-start" onClick={() => {
+                      onSectionChange('auth');
+                      setIsMobileMenuOpen(false);
+                    }}>
+                      <User className="w-4 h-4 mr-2" />
+                      Sign In
+                    </Button>
+                    <Button variant="default" size="sm" onClick={() => {
+                      onSectionChange('auth');
+                      setIsMobileMenuOpen(false);
+                    }}>
+                      Get Started
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
