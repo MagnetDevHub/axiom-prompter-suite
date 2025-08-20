@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      click_tracking: {
+        Row: {
+          clicked_at: string | null
+          commission_earned: number | null
+          converted: boolean | null
+          id: string
+          product_id: string | null
+          referrer_page: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          clicked_at?: string | null
+          commission_earned?: number | null
+          converted?: boolean | null
+          id?: string
+          product_id?: string | null
+          referrer_page?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          clicked_at?: string | null
+          commission_earned?: number | null
+          converted?: boolean | null
+          id?: string
+          product_id?: string | null
+          referrer_page?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "click_tracking_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "click_tracking_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "user_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
       community_posts: {
         Row: {
           category: string
@@ -50,6 +98,137 @@ export type Database = {
         }
         Relationships: []
       }
+      coupons: {
+        Row: {
+          applicable_categories: Json | null
+          code: string
+          created_at: string | null
+          discount_type: string
+          discount_value: number | null
+          expiry_date: string | null
+          id: string
+          is_active: boolean | null
+          minimum_purchase: number | null
+        }
+        Insert: {
+          applicable_categories?: Json | null
+          code: string
+          created_at?: string | null
+          discount_type: string
+          discount_value?: number | null
+          expiry_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          minimum_purchase?: number | null
+        }
+        Update: {
+          applicable_categories?: Json | null
+          code?: string
+          created_at?: string | null
+          discount_type?: string
+          discount_value?: number | null
+          expiry_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          minimum_purchase?: number | null
+        }
+        Relationships: []
+      }
+      price_history: {
+        Row: {
+          discount_percentage: number | null
+          id: string
+          price: number
+          product_id: string | null
+          tracked_at: string | null
+        }
+        Insert: {
+          discount_percentage?: number | null
+          id?: string
+          price: number
+          product_id?: string | null
+          tracked_at?: string | null
+        }
+        Update: {
+          discount_percentage?: number | null
+          id?: string
+          price?: number
+          product_id?: string | null
+          tracked_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_history_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          affiliate_url: string | null
+          asin: string
+          availability: boolean | null
+          brand: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          discount_percentage: number | null
+          features: Json | null
+          id: string
+          image_url: string | null
+          last_updated: string | null
+          original_price: number | null
+          price: number | null
+          rating: number | null
+          review_count: number | null
+          specifications: Json | null
+          title: string
+        }
+        Insert: {
+          affiliate_url?: string | null
+          asin: string
+          availability?: boolean | null
+          brand?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number | null
+          features?: Json | null
+          id?: string
+          image_url?: string | null
+          last_updated?: string | null
+          original_price?: number | null
+          price?: number | null
+          rating?: number | null
+          review_count?: number | null
+          specifications?: Json | null
+          title: string
+        }
+        Update: {
+          affiliate_url?: string | null
+          asin?: string
+          availability?: boolean | null
+          brand?: string | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number | null
+          features?: Json | null
+          id?: string
+          image_url?: string | null
+          last_updated?: string | null
+          original_price?: number | null
+          price?: number | null
+          rating?: number | null
+          review_count?: number | null
+          specifications?: Json | null
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -82,6 +261,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      search_queries: {
+        Row: {
+          clicked_products: Json | null
+          conversion_rate: number | null
+          created_at: string | null
+          id: string
+          query: string
+          results_count: number | null
+          session_id: string | null
+        }
+        Insert: {
+          clicked_products?: Json | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          query: string
+          results_count?: number | null
+          session_id?: string | null
+        }
+        Update: {
+          clicked_products?: Json | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          query?: string
+          results_count?: number | null
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "search_queries_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "user_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
       }
       subscribers: {
         Row: {
@@ -116,6 +333,45 @@ export type Database = {
           subscription_tier?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_sessions: {
+        Row: {
+          categories_of_interest: Json | null
+          created_at: string | null
+          id: string
+          last_active: string | null
+          preferences: Json | null
+          price_range: Json | null
+          search_history: Json | null
+          session_id: string
+          user_id: string | null
+          viewed_products: Json | null
+        }
+        Insert: {
+          categories_of_interest?: Json | null
+          created_at?: string | null
+          id?: string
+          last_active?: string | null
+          preferences?: Json | null
+          price_range?: Json | null
+          search_history?: Json | null
+          session_id: string
+          user_id?: string | null
+          viewed_products?: Json | null
+        }
+        Update: {
+          categories_of_interest?: Json | null
+          created_at?: string | null
+          id?: string
+          last_active?: string | null
+          preferences?: Json | null
+          price_range?: Json | null
+          search_history?: Json | null
+          session_id?: string
+          user_id?: string | null
+          viewed_products?: Json | null
         }
         Relationships: []
       }
